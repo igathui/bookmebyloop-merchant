@@ -61,7 +61,7 @@ export default function Hero({
             </p>
             <div className="flex w-full flex-col justify-center gap-2 sm:flex-row lg:justify-start">
               <Button asChild className="w-full sm:w-auto">
-                <Link href="/signup">Sign Up</Link>
+                <Link href="/register">Register</Link>
               </Button>
               <Button asChild variant="outline" className="w-full sm:w-auto">
                 <Link href="/login">

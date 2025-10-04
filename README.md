@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BookMeByLoop Merchant Portal
+
+This is the merchant portal for BookMeByLoop, a business management and booking platform built with [Next.js](https://nextjs.org). Merchants can register their business, manage business information, and define services offered to customers.
+
+## Features
+
+- Business registration and login
+- Secure authentication
+- Add and manage business details (description, location, till number)
+- Add, edit, and remove services with rates
+- Dashboard for merchants
+- Built with Prisma ORM and PostgreSQL
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser to use the merchant portal.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Database Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project uses [Prisma](https://www.prisma.io/) and PostgreSQL.  
+To apply schema changes and set up your database, run:
+
+```bash
+pnpm exec prisma migrate dev
+```
+
+## Project Structure
+
+- `src/app/(protected)/register` – Merchant registration page
+- `src/app/(protected)/login` – Merchant login page
+- `src/app/business-info` – Business info management
+- `src/app/api/auth/register` – Registration API
+- `src/app/api/auth/login` – Login API
+- `prisma/schema.prisma` – Database schema
+
+## Reflections
+
+The scope of this application was too ambitious for the allotted time during the Hackathon. As a result, this repository represents a working concept and prototype rather than a fully polished product. Key features and improvements remain as future work.
+
+## Future Implementations/Ideas
+
+Merchant analytics dashboard to keep track of customer satisfaction, turnaround, and retention
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Prisma Documentation](https://www.prisma.io/docs)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deployment
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+You can deploy this app on [Vercel](https://vercel.com/) or any platform supporting Next.js and PostgreSQL.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---

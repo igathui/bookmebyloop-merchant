@@ -1,21 +1,73 @@
-export default async function DashboardPage() {
-  // For MVP, we'll just show a simple dashboard
-  // In production, you'd check authentication here
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import { Building2, Calendar, Users, LogOut } from "lucide-react";
+import { BusinessOverview } from "@/components/dashboard/business-overview";
+import { AppointmentsView } from "@/components/dashboard/appointments-view";
+import { ClientsView } from "@/components/dashboard/clients-view";
+
+type View = "overview" | "appointments" | "clients";
+
+export default function DashboardPage() {
+  const router = useRouter();
+  const [activeView, setActiveView] = useState<View>("overview");
+
+  const handleLogout = () => {
+    router.push("/");
+  };
+
+  const navItems = [
+    { id: "overview" as View, label: "Business Overview", icon: Building2 },
+    { id: "appointments" as View, label: "Appointments", icon: Calendar },
+    { id: "clients" as View, label: "Clients", icon: Users },
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="mx-auto max-w-4xl p-8">
+    <div className="bg-background flex min-h-screen">
+      <aside className="border-border bg-card sticky top-0 h-screen w-64 border-r p-6">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold">Business Dashboard</h1>
+          <h1 className="text-2xl font-bold">Dashboard</h1>
         </div>
 
-        <div className="rounded-lg bg-white p-6 shadow-sm">
-          <p className="text-muted-foreground">
-            Dashboard content will be displayed here after successful login and
-            business info completion.
-          </p>
+        <nav className="space-y-2">
+          {navItems.map((item) => {
+            const Icon = item.icon;
+            return (
+              <button
+                key={item.id}
+                onClick={() => setActiveView(item.id)}
+                className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-colors ${
+                  activeView === item.id
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                }`}
+              >
+                <Icon className="h-5 w-5" />
+                <span className="font-medium">{item.label}</span>
+              </button>
+            );
+          })}
+        </nav>
+
+        <div className="absolute right-6 bottom-6 left-6">
+          <Button
+            onClick={handleLogout}
+            variant="outline"
+            className="w-full gap-2 bg-transparent"
+          >
+            <LogOut className="h-4 w-4" />
+            Logout
+          </Button>
         </div>
-      </div>
+      </aside>
+
+      <main className="flex-1 p-8">
+        {activeView === "overview" && <BusinessOverview />}
+        {activeView === "appointments" && <AppointmentsView />}
+        {activeView === "clients" && <ClientsView />}
+      </main>
     </div>
   );
 }

@@ -4,30 +4,29 @@ import { prisma } from "@/lib/prisma";
 export async function POST(request: Request) {
   try {
     console.log("[v0] Registration API called");
-    const { name, email, phone, password } = await request.json();
-    console.log("[v0] Received registration data:", {
+    const {
       name,
       email,
       phone,
-      hasPassword: !!password,
-    });
+      password,
+      description,
+      location,
+      tillNumber,
+      services,
+    } = await request.json();
 
     // Check if business already exists
-    console.log("[v0] Checking if business email already exists");
     const existingBusiness = await prisma.business.findUnique({
       where: { email },
     });
-
     if (existingBusiness) {
-      console.log("[v0] Registration failed: Email already registered");
       return NextResponse.json(
         { error: "Business email already registered" },
         { status: 400 },
       );
     }
 
-    // Create business
-    console.log("[v0] Creating business in database");
+    // 1. Create Business
     const business = await prisma.business.create({
       data: {
         name,
@@ -36,17 +35,36 @@ export async function POST(request: Request) {
         password,
       },
     });
-    console.log("[v0] Business created successfully with ID:", business.id);
+
+    // 2. Create BusinessInfo
+    const businessInfo = await prisma.businessInfo.create({
+      data: {
+        businessId: business.id,
+        description,
+        location,
+        tillNumber,
+      },
+    });
+
+    // 3. Create Services (if any)
+    if (services && services.length > 0) {
+      await prisma.service.createMany({
+        data: services.map((s: { name: string; rate: number }) => ({
+          name: s.name,
+          rate: s.rate,
+          businessInfoId: businessInfo.id, // <-- Correct relation!
+        })),
+      });
+    }
 
     return NextResponse.json(
-      { message: "Business registered successfully", businessId: business.id },
+      { message: "Business registered successfully", business },
       { status: 201 },
     );
   } catch (error) {
     console.error("[v0] Registration error:", error);
-    return NextResponse.json(
-      { error: "Failed to register business" },
-      { status: 500 },
-    );
+    const errorMessage =
+      error instanceof Error ? error.message : "Failed to register business";
+    return NextResponse.json({ error: errorMessage }, { status: 500 });
   }
 }

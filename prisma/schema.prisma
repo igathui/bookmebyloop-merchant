@@ -40,23 +40,25 @@ model Business {
 }
 
 model BusinessInfo {
-  id          String   @id @default(cuid())
-  businessId  String   @unique
-  business    Business @relation(fields: [businessId], references: [id], onDelete: Cascade)
+  id          String    @id @default(cuid())
+  businessId  String    @unique
+  business    Business  @relation(fields: [businessId], references: [id], onDelete: Cascade)
   description String
   location    String
   tillNumber  String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  services    Service[] // <-- Relates many services to one BusinessInfo
 }
 
 model Service {
-  id         String   @id @default(cuid())
-  businessId String
-  name       String
-  rate       Float
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id             String       @id @default(cuid())
+  businessInfoId String // <-- Foreign key to BusinessInfo
+  businessInfo   BusinessInfo @relation(fields: [businessInfoId], references: [id], onDelete: Cascade)
+  name           String
+  rate           Float
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
 
-  @@index([businessId])
+  @@index([businessInfoId])
 }

@@ -1,17 +1,17 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { getSession } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const businessId = await getSession();
+    const { businessId, description, location, tillNumber, services } =
+      await request.json();
 
     if (!businessId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json(
+        { error: "Business ID is required" },
+        { status: 400 },
+      );
     }
-
-    const { description, location, tillNumber, services } =
-      await request.json();
 
     // Create business info
     await prisma.businessInfo.create({

@@ -54,6 +54,7 @@ Merchant analytics dashboard to keep track of customer satisfaction, turnaround,
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Prisma Documentation](https://www.prisma.io/docs)
+- [NeonDB Documentation](https://neon.tech/docs/introduction)
 
 ## Deployment
 
